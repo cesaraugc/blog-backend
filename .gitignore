@@ -26,3 +26,4 @@ replay_pid*
 .metadata/
 target/
 .vscode/
+*.DS_Store
