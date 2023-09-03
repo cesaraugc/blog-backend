@@ -1,15 +1,19 @@
 package com.cesaraugc.blog.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cesaraugc.blog.dto.ArtigoDTO;
@@ -30,19 +34,34 @@ public class ArtigoController {
     }
 
     @GetMapping("/{id}")
-    public ArtigoDTO getById(@PathVariable long id) {
-        Artigo artigo = artigoService.getById(id);
-        return new ArtigoDTO(artigo);
-    }
-
-    @DeleteMapping("{id}")
-    public void deleteById(@PathVariable long id) {
-        artigoService.deleteById(id);
+    public ResponseEntity<?> getById(@PathVariable long id) {
+        Optional<Artigo> artigo = artigoService.getById(id);
+        if (artigo.isPresent()) {
+            ArtigoDTO artigoDTO = new ArtigoDTO(artigo.get());
+            return new ResponseEntity<>(artigoDTO, HttpStatus.OK);
+        }
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        map.put("status", HttpStatus.NOT_FOUND.value());
+        map.put("message", "Data is not found");
+        return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
     }
 
     @PostMapping()
     public Artigo saveArtigo(@RequestBody Artigo artigo) {
         artigoService.save(artigo);
         return artigo;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable long id) {
+        Optional<Artigo> artigo = artigoService.getById(id);
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
+        if (artigo.isPresent()) {
+            artigoService.deleteById(id);
+            map.put("message", "Record is deleted successfully!");
+            return new ResponseEntity<>(map, HttpStatus.OK);
+        }
+        map.put("message", "Data is not found");
+        return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
     }
 }

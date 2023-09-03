@@ -2,8 +2,13 @@ package com.cesaraugc.blog.repository;
 
 import com.cesaraugc.blog.model.Artigo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-public interface ArtigoRepository extends JpaRepository<Artigo, Long> {
+import org.springframework.data.repository.CrudRepository;
+
+public interface ArtigoRepository extends CrudRepository<Artigo, Long> {
+
+    @Override
+    List<Artigo> findAll();
 
 }

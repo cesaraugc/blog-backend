@@ -1,6 +1,7 @@
 package com.cesaraugc.blog.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,8 @@ public class ArtigoServiceImpl implements ArtigoService {
     }
 
     @Override
-    public Artigo getById(long id) {
-        return this.artigoRepository.getReferenceById(id);
+    public Optional<Artigo> getById(long id) {
+        return this.artigoRepository.findById(id);
     }
 
     @Override
