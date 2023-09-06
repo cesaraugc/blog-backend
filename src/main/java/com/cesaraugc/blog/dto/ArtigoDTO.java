@@ -16,7 +16,7 @@ public class ArtigoDTO {
         texto = artigo.getTexto();
     }
 
-    public static List<ArtigoDTO> converter(List<Artigo> livros) {
-        return livros.stream().map(ArtigoDTO::new).collect(Collectors.toList());
+    public static List<ArtigoDTO> converter(List<Artigo> artigos) {
+        return artigos.stream().map(ArtigoDTO::new).collect(Collectors.toList());
     }
 }
