@@ -1,11 +1,10 @@
-FROM eclipse-temurin:17-jdk-jammy
+FROM maven:3.9.4-eclipse-temurin-17 AS build
 
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+COPY pom.xml /workdir/server/pom.xml
+WORKDIR /workdir/server
+RUN mvn dependency:go-offline
 
-COPY src ./src
+COPY src /workdir/server/src
+RUN mvn clean install -DskipTests -q
 
-CMD ["./mvnw", "spring-boot:run"]
-
-EXPOSE 8080
+CMD mvn test && mvn spring-boot:run
