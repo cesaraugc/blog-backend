@@ -1,9 +1,19 @@
 services:
+  app:
+    image: 'app:latest'
+    build:
+      context: .
+    ports:
+      - '8080:8080'
+    restart: on-failure
+    depends_on:
+      - postgres
   postgres:
     image: 'postgres:latest'
+    restart: always
     environment:
-      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_DB=backend_db'
       - 'POSTGRES_PASSWORD=password'
-      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_USER=user'
     ports:
       - '5432:5432'
